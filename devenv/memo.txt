@@ -1,0 +1,5 @@
+docker build -t local/c7-rpi-cross . 
+docker run --rm -it --name rpi-cross -v data:/home/data --cap-add=SYS_PTRACE --security-opt=apparmor:unconfined ruby_c7-rpi-cross
+
+
+cmake -
