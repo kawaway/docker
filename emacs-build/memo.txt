@@ -1,0 +1,2 @@
+docker build -t local/c7-emacs .
+docker run --rm -it --security-opt seccomp=unconfined local/c7-emacs /bin/bash
