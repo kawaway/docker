@@ -26,9 +26,11 @@ RUN 	cd /usr/local/src \
 	&& echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh \
 	&& echo '%rbenv ALL=(ALL) ALL' >> /etc/sudoers 
 
-RUN 	rbenv install -v 2.0.0-p648 \
+RUN 	rbenv install -v 1.9.3-p551 \
+ 	&& rbenv install -v 2.0.0-p648 \
+ 	&& rbenv install -v 2.4.0 \
 	&& rbenv rehash \
-	&& rbenv global 2.0.0-p648
+	&& rbenv global 1.9.3-p551 
 
 # install git
 RUN	yum -y install gettext perl-devel curl-devel \
@@ -54,13 +56,17 @@ ENV	CROSS_COMPILE	arm-linux-gnueabihf-
 ENV	PATH	$PATH:/opt/rpi/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin
 
 WORKDIR	/tmp/h2o
-ADD	build.sh /tmp/h2o
-ADD	Makefile /tmp/h2o
+#ADD	build.sh /tmp/h2o
+#ADD	Makefile /tmp/h2o
 
-#WORKDIR /tmp/work
+COPY	global-6.5.6-1.el7.centos.x86_64.rpm
+RUN	rpm -ivh global-6.5.6-1.el7.centos.x86_64.rpm && rm global-*
 ADD	emacs-25.1.tar.gz /usr/local
 #RUN	mv bin/* /bin && mv libexec/emacs /usr/local && mv var/games/emacs /var/games && mv share/emacs /usr/local/share 
+#RUN	mv bin/* /bin && mv libexec/emacs /usr/local && mv var/games/emacs /var/games && mv share/emacs /usr/local/share 
 
-RUN	ln -fs /home/data/dotfiles/_emacs.d /$HOME/.emacs.d 
+RUN	ln -fs /home/data/dotfiles/_emacs.d /$HOME/.emacs.d \ 
+	&& ln -fs /home/data/dotfiles/_ssh /$HOME/.ssh  \
+	&& ln -fs /home/data/dotfiles/_git /$HOME/.git 
 
 CMD	/bin/bash
